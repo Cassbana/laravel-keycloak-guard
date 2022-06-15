@@ -1,6 +1,7 @@
 <?php
 namespace KeycloakGuard;
 
+use App\Models\Supplier;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
@@ -129,6 +130,10 @@ class KeycloakGuard implements Guard
         $user = $this->provider->{$methodOnProvider}($this->decodedToken, $credentials);
       } else {
         $user = $this->provider->retrieveByCredentials($credentials);
+          if(!$user){
+              $this->provider->setModel(Supplier::class);
+              $user = $this->provider->retrieveByCredentials(['phone_number' => $credentials['email']]);
+          }
       }      
 
       if (!$user) {
