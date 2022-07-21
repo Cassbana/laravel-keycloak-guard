@@ -130,7 +130,7 @@ class KeycloakGuard implements Guard
         $user = $this->provider->{$methodOnProvider}($this->decodedToken, $credentials);
       } else {
         $user = $this->provider->retrieveByCredentials($credentials);
-          if(!$user){
+          if(!$user && isset($credentials['email'])){
               $this->provider->setModel(Supplier::class);
               $user = $this->provider->retrieveByCredentials(['phone_number' => $credentials['email']]);
           }
